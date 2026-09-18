@@ -1,0 +1,41 @@
+为什么之前的脚本无效？
+====================
+
+原 config.toml 强制使用 custom provider（CPA），并写有 CPA 的 base_url 和 bearer token。
+这时即使成功登录 Google / ChatGPT，模型请求仍会发给 CPA，而不是 OpenAI 的 ChatGPT 服务。
+
+本工具的作用：
+
+1. 第一次运行时，将你当前的 config.toml 原样保存为：
+   C:\Users\<你的用户名>\.codex\config.api.toml
+   其中的 API token 仍留在你自己的电脑上；本工具不会显示、上传或改写它。
+
+2. 每次切到 ChatGPT 时，都会从完整 API 备份重新生成 config.chatgpt.toml：
+   保留 windows、features、notify 等普通设置，但成对移除 model_provider、model
+   以及整个 CPA provider/token 表，避免出现“custom not found”。
+
+3. 选项 1：写入 ChatGPT 配置并执行 codex login；在浏览器中选择 Google 登录。
+
+4. 选项 2：恢复原 API/CPA 配置。不需要再次输入 API Key。
+
+使用方法：
+
+1. 解压整个 ZIP。
+2. 完全关闭 Codex 桌面客户端。
+3. 双击 Start-Codex-Profile-Switcher.bat。
+4. 选 1 或 2，再重新打开客户端。
+
+关于 OPENAI_API_KEY：
+
+如果选 1 后重新打开客户端仍显示 API 登录，请到 Windows“编辑环境变量”中删除
+OPENAI_API_KEY（仅在它原本是专为 Codex 设置时）。然后完全退出并重开 Codex。
+如果该变量还被其他程序使用，请先记录其用途或改由那些程序自己的 .env 文件保存，
+不要在不确认影响范围的情况下删除它。
+
+紧急恢复：
+
+如果客户端提示 “Model provider custom not found”，先关闭客户端，然后在 PowerShell 运行：
+
+Copy-Item "$env:USERPROFILE\.codex\config.api.toml" "$env:USERPROFILE\.codex\config.toml" -Force
+
+这会恢复原来的 CPA 配置；之后再使用本工具的修复版切换。
