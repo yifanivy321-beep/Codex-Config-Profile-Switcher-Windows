@@ -1,9 +1,3 @@
-为什么之前的脚本无效？
-====================
-
-原 config.toml 强制使用 custom provider（CPA），并写有 CPA 的 base_url 和 bearer token。
-这时即使成功登录 Google / ChatGPT，模型请求仍会发给 CPA，而不是 OpenAI 的 ChatGPT 服务。
-
 本工具的作用：
 
 1. 第一次运行时，将你当前的 config.toml 原样保存为：
